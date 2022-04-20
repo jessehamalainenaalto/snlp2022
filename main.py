@@ -14,6 +14,9 @@ DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 class DataSet:
+    '''
+    
+    '''
     def __init__(self,tokenizer,name='emotion'):
         self.tokenizer = tokenizer
         self.name = name
@@ -25,7 +28,6 @@ class DataSet:
 
     def tokenize(self,batch):
         return self.tokenizer(batch["text"],padding=True,truncation=True)
-
 
 def get_model(model_ckpt):
     return (AutoModelForSequenceClassification.from_pretrained(model_ckpt, num_labels=NUM_LABELS).to(DEVICE))
@@ -40,11 +42,20 @@ def compute_metrics(pred):
     acc = accuracy_score(labels, preds)
     return {"accuracy": acc, "f1": f1}
 
-
 def main():
+    '''
+    TODO:
+    =====
+    Model names to run:
+    - bert-base-uncased
+    - roberta-base
+    - xlnet-base-cased
     
+    Cased vs. uncased:
+    In BERT uncased, the text has been lowercased before WordPiece tokenization step while in BERT cased, the text is same as the input text (no changes).
     
-    model_ckpt = "distilbert-base-uncased"
+    '''
+    model_ckpt = "roberta-base"
     model = get_model(model_ckpt)
     tokenizer = get_tokenizer(model_ckpt)
     dataset = DataSet(tokenizer)
