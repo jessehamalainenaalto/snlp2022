@@ -1,4 +1,4 @@
-from transformers import AutoModelForSequenceClassification
+from transformers import AutoModelForSequenceClassification,AutoModel
 from transformers import AutoTokenizer
 import data
 import abc
@@ -49,7 +49,7 @@ class Model(metaclass=abc.ABCMeta):
         acc = accuracy_score(labels, preds)
         return {"accuracy": acc, "f1": f1}
 
-    def train(self):
+    def train(self,save_model=False):
         trainer = Trainer(
             model=self.model,
             args=self.get_training_arguments(),
@@ -57,14 +57,10 @@ class Model(metaclass=abc.ABCMeta):
             train_dataset=self.data.encoded_dataset["train"],
             eval_dataset=self.data.encoded_dataset["validation"],
             tokenizer=self.tokenizer)
+        
         trainer.train()
-
-    def test():
-        pass
-    
-        #     preds_output = trainer.predict(emotions_encoded["validation"])
-        #     preds_output.metrics
-        #     y_preds = np.argmax(preds_output.predictions, axis=1)
+        if save_model:
+            trainer.save_model(f'trained_models/{self.path}_{self.data.path}')
 
 class AmazonModel(Model):
     def __init__(self,path):
