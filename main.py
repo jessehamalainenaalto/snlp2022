@@ -1,56 +1,85 @@
 import os
 import models
 from datasets import list_datasets,load_dataset,Dataset,dataset_dict
-from transformers import AutoModelForSequenceClassification,AutoModel
+from transformers import AutoModelForSequenceClassification,AutoTokenizer
+import numpy as np
 
 os.environ['WANDB_DISABLED'] = "true"
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
     
+EPOCHS = 10
 
-class TweetPipeline:
-    def __init__(self):
-        self.bert = models.TweetModel(path="bert-base-cased")
-        self.roberta = models.TweetModel(path="roberta-base")
-        # self.xlnet = 
-    
-def test():
-    trainer = AutoModelForSequenceClassification.from_pretrained(f'trained_models/{self.path}_{self.data.path}')
-    print(trainer)
-    
-        #     preds_output = trainer.predict(emotions_encoded["validation"])
-        #     preds_output.metrics
-        #     y_preds = np.argmax(preds_output.predictions, axis=1)
-    
+def train_bert():
+    model_name = "bert-base-cased"
+
+    bert_amazon = models.AmazonModel(
+        model_name=model_name,
+        mode='train',
+        epochs=EPOCHS)
+    bert_amazon.train(save_model=True)
+
+    bert_financial = models.FinancialModel(
+        model_name=model_name,
+        mode='train',
+        epochs=EPOCHS)
+    bert_financial.train(save_model=True)
+
+    bert_tweet = models.TweetModel(
+        model_name=model_name,
+        mode='train',
+        epochs=EPOCHS)
+    bert_tweet.train(save_model=True)
+
+def train_xlnet():
+    model_name = 'xlnet-base-cased'
+
+    xlnet_amazon = models.AmazonModel(
+        model_name=model_name,
+        mode='train',
+        epochs=EPOCHS)
+    xlnet_amazon.train(save_model=True)
+
+    xlnet_financial = models.FinancialModel(
+        model_name=model_name,
+        mode='train',
+        epochs=EPOCHS)
+    xlnet_financial.train(save_model=True)
+
+    xlnet_tweet = models.TweetModel(
+        model_name=model_name,
+        mode='train',
+        epochs=EPOCHS)
+    xlnet_tweet.train(save_model=True)
+
+def train_roberta():
+    model_name = 'roberta-base'
+
+    bert_amazon = models.AmazonModel(
+        model_name=model_name,
+        mode='train',
+        epochs=EPOCHS)
+    bert_amazon.train(save_model=True)
+
+    roberta_financial = models.FinancialModel(
+        model_name=model_name,
+        mode='train',
+        epochs=EPOCHS)
+    roberta_financial.train(save_model=True)
+
+    roberta_tweet = models.TweetModel(
+        model_name=model_name,
+        mode='train',
+        epochs=EPOCHS)
+    roberta_tweet.train(save_model=True)
+
+
 def main():
+    ''' Run python -m main in the snlp2022 folder'''
+    train_bert()
+    train_roberta()
+    train_xlnet()
     
-    bert_tweet = models.TweetModel(path="bert-base-cased")
-    
-    bert_tweet.train()
-    
-    
-    
-    # roberta_tweet = models.TweetModel(path="roberta-base")
-    # xlnet_tweet = models.TweetModel(path="xlnet-base-cased")
-    
-    # bert_amazon = models.AmazonModel(path="bert-base-cased")
-    # roberta_amazon = models.AmazonModel(path="roberta-base")
-    # xlnet_amazon = models.AmazonModel(path="xlnet-base-cased")
-    
-    # bert_financial = models.FinancialModel(path="bert-base-cased")
-    # roberta_financial = models.FinancialModel(path="roberta-base")
-    # xlnet_financial = models.FinancialModel(path="xlnet-base-cased")
-    
-    
-    
-    
-    
-    
-    
-        
     
 if __name__ == '__main__':
 
-        
     main()
-    
-    # # 
-    # # print(ds_dict)

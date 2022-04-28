@@ -131,3 +131,10 @@ dmypy.json
 wandb
 outputs
 experiments.py
+trained_models
+images
+cache_dir
+check_data.py
+own.py
+preds.npz
+utils.py

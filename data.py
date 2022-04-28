@@ -10,9 +10,16 @@ class Data(metaclass=abc.ABCMeta):
         
     def load(self):
         if self.name == None:
-            return load_dataset(self.path)
+            return load_dataset(
+                self.path,
+                cache_dir='cache_dir'
+            )
         else:
-            return load_dataset(self.path,self.name)
+            return load_dataset(
+                self.path,
+                self.name,
+                cache_dir='cache_dir'
+            )
     
     @abc.abstractmethod
     def tokenize(self,batch):
@@ -36,13 +43,17 @@ class AmazonData(Data):
         ds.set_format(type='pandas')
         
         df_train = ds['train'][:]
+        df_train = df_train.sample(frac=0.05).copy()
         df_train['label'] = df_train['stars'].apply(lambda x: x-1)
+        df_train = df_train.drop(['stars','review_id','product_id','review_title','reviewer_id'],1)
         
         df_validation = ds['validation'][:]
         df_validation['label'] = df_validation['stars'].apply(lambda x: x-1)
+        df_validation = df_validation.drop(['stars','review_id','product_id','review_title','reviewer_id'],1)
         
         df_test = ds['test'][:]
         df_test['label'] = df_test['stars'].apply(lambda x: x-1)
+        df_test = df_test.drop(['stars','review_id','product_id','review_title','reviewer_id'],1)
 
         ds_dict = dataset_dict.DatasetDict()
         ds_dict['train'] = Dataset.from_pandas(df_train)
@@ -65,11 +76,10 @@ class FinancialData(Data):
         ds = self.dataset
         ds.set_format(type='pandas')
         df = ds['train'][:]
-        df = df.sample(frac=1,random_state=1).copy()
+        df = df.sample(frac=1).copy()
         
         n_train = int(len(df)*0.8)
         n_val = int(len(df)*0.1)
-        n_test = len(df) - (n_train+n_val)
         
         df_train = df[:n_train].copy()
         df_validation = df[n_train:n_train+n_val].copy()
