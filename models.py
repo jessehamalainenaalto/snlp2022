@@ -73,7 +73,7 @@ class Model(metaclass=abc.ABCMeta):
         disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=self.labels)
         disp.plot(cmap="Greens", values_format=".2f", ax=ax, colorbar=False)
         plt.title(f"{self.model_name}  -  {self.data.path}")
-        plt.savefig(f'images/{self.model_name}_{self.data.path}_cmatrix_{self.test}')
+        plt.savefig(f'images/{self.model_name}_{self.data.path}_cmatrix_{self.mode}')
 
     def compute_metrics(self,pred):
         labels = pred.label_ids
